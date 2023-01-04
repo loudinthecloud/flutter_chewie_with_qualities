@@ -19,6 +19,8 @@ typedef ChewieRoutePageBuilder = Widget Function(
   ChewieControllerProvider controllerProvider,
 );
 
+typedef HDToogleCallback = void Function();
+
 /// A Video Player with Material and Cupertino skins.
 ///
 /// `video_player` is pretty low level. Chewie wraps it in a friendly skin to
@@ -273,6 +275,8 @@ class ChewieController extends ChangeNotifier {
     this.isLive = false,
     this.allowFullScreen = true,
     this.allowMuting = true,
+    this.hdCallback,
+    this.isHd,
     this.allowPlaybackSpeedChanging = true,
     this.useRootNavigator = true,
     this.playbackSpeeds = const [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
@@ -320,6 +324,8 @@ class ChewieController extends ChangeNotifier {
     bool? isLive,
     bool? allowFullScreen,
     bool? allowMuting,
+    HDToogleCallback? hdCallback,
+    bool? isHd,
     bool? allowPlaybackSpeedChanging,
     bool? useRootNavigator,
     Duration? hideControlsTimer,
@@ -368,6 +374,8 @@ class ChewieController extends ChangeNotifier {
       isLive: isLive ?? this.isLive,
       allowFullScreen: allowFullScreen ?? this.allowFullScreen,
       allowMuting: allowMuting ?? this.allowMuting,
+      hdCallback: hdCallback ?? this.hdCallback,
+      isHd: isHd ?? this.isHd,
       allowPlaybackSpeedChanging:
           allowPlaybackSpeedChanging ?? this.allowPlaybackSpeedChanging,
       useRootNavigator: useRootNavigator ?? this.useRootNavigator,
@@ -496,6 +504,10 @@ class ChewieController extends ChangeNotifier {
 
   /// Defines if the mute control should be shown
   final bool allowMuting;
+
+  /// HD Button Support
+  final HDToogleCallback? hdCallback;
+  final bool? isHd;
 
   /// Defines if the playback speed control should be shown
   final bool allowPlaybackSpeedChanging;

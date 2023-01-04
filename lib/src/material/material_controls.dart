@@ -251,6 +251,28 @@ class _MaterialControlsState extends State<MaterialControls>
   ) {
     final iconColor = Theme.of(context).textTheme.button!.color;
 
+    final controllerButtons = <Widget>[];
+
+    if (chewieController.isLive) {
+      controllerButtons.add(const Expanded(child: Text('LIVE')));
+    } else {
+      controllerButtons.add(_buildPosition(iconColor),);
+    }
+
+    if (chewieController.hdCallback != null) {
+      controllerButtons.add(const Spacer());
+      controllerButtons.add(_buildHDButton(chewieController.isHd!));
+    }
+
+    if (chewieController.allowMuting) {
+      controllerButtons.add(_buildMuteButton(controller));
+      controllerButtons.add(const Spacer());
+    }
+
+    if (chewieController.allowFullScreen) {
+      controllerButtons.add(_buildExpandButton());
+    }
+
     return AnimatedOpacity(
       opacity: notifier.hideStuff ? 0.0 : 1.0,
       duration: const Duration(milliseconds: 300),
@@ -270,16 +292,7 @@ class _MaterialControlsState extends State<MaterialControls>
               Flexible(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    if (chewieController.isLive)
-                      const Expanded(child: Text('LIVE'))
-                    else
-                      _buildPosition(iconColor),
-                    if (chewieController.allowMuting)
-                      _buildMuteButton(controller),
-                    const Spacer(),
-                    if (chewieController.allowFullScreen) _buildExpandButton(),
-                  ],
+                  children: controllerButtons,
                 ),
               ),
               SizedBox(
@@ -329,6 +342,32 @@ class _MaterialControlsState extends State<MaterialControls>
             child: Icon(
               _latestValue.volume > 0 ? Icons.volume_up : Icons.volume_off,
               color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _buildHDButton(
+    bool isHd
+  ) {
+    return GestureDetector(
+      onTap: () {
+        chewieController.hdCallback!();
+      },
+      child: AnimatedOpacity(
+        opacity: notifier.hideStuff ? 0.0 : 1.0,
+        duration: const Duration(milliseconds: 300),
+        child: ClipRect(
+          child: Container(
+            height: barHeight,
+            padding: const EdgeInsets.only(
+              left: 6.0,
+            ),
+            child: Icon(
+              Icons.hd_outlined,
+              color: isHd ? Colors.green : Colors.grey,
             ),
           ),
         ),
